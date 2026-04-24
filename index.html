@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abidos Profit Calculator</title>
+    <style>
+        :root {
+            --bg-color: #1e1e24;
+            --card-bg: #2b2b36;
+            --result-bg: #22222b;
+            --text-main: #f0f0f5;
+            --text-muted: #a0a0b0;
+            --accent: #ff6b6b;
+            --gold-color: #ffd700;
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; 
+            margin: 0;
+            overflow: hidden; 
+        }
+
+        .calculator-container {
+            background-color: var(--card-bg);
+            padding: 1.5rem; 
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            width: fit-content;
+            min-width: 750px;
+            max-width: 95vw;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1.5rem; 
+        }
+
+        .main-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 0.5rem;
+            user-select: none;
+            -webkit-user-drag: none;
+            object-fit: contain;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+            user-select: none;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-color);
+            padding: 0.6rem; 
+            border-radius: var(--border-radius);
+            margin-bottom: 0.8rem; 
+            border: 1px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-group:focus-within {
+            border-color: var(--accent);
+        }
+
+        .input-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 1rem;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            outline: none;
+            width: 100%;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            appearance: textfield;
+            -moz-appearance: textfield;
+        }
+
+        .section-container {
+            margin-bottom: 0.8rem; 
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem; 
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .section-label .input-icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 0.75rem;
+        }
+
+        .multi-input-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.8rem; 
+        }
+
+        .multi-input-row .sub-group {
+            margin-bottom: 0;
+            flex: 1;
+        }
+
+        .results-container {
+            background-color: var(--result-bg);
+            padding: 1.2rem; 
+            border-radius: var(--border-radius);
+            border: 1px solid #3a3a48;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem; 
+            white-space: nowrap; 
+            margin-top: 0.5rem;
+        }
+
+        .result-sentence {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .highlight-val {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 0 0.2rem;
+        }
+
+        .actual-profit-sentence {
+            margin-top: 0.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid #3a3a48;
+            font-size: 1.1rem;
+            color: var(--text-main); 
+            display: flex;
+            align-items: center;
+            gap: 0.4rem; 
+        }
+
+        .actual-profit-val {
+            font-size: 1.3rem;
+            color: var(--gold-color);
+            font-weight: bold;
+        }
+
+        .inline-icon {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="calculator-container">
+        <div class="header">
+            <img src="https://lostarkcodex.com/icons/use_13_252.webp" alt="Abidos" class="main-icon" draggable="false">
+            <h1>Abidos Profit Calculator</h1>
+            <div class="subtitle">Made by Excoupe &amp; Darthmaulh</div>
+        </div>
+
+        <div class="input-group">
+            <img src="https://lostarkcodex.com/icons/shop_icon_44.webp" alt="Blue Crystal" class="input-icon" draggable="false">
+            <div class="input-wrapper">
+                <label for="bcPrice">Blue Crystal Price</label>
+                <input type="number" id="bcPrice" placeholder="0" min="0">
+            </div>
+        </div>
+
+        <div class="section-container">
+            <div class="section-label">
+                <img src="https://lostarkcodex.com/icons/use_13_252.webp" alt="Abidos Fusion Material" class="input-icon" draggable="false">
+                <span>Abidos Values</span>
+            </div>
+            
+            <div class="multi-input-row">
+                <div class="input-group sub-group">
+                    <img src="https://lostarkcodex.com/icons/use_13_252.webp" alt="Abidos" class="input-icon" draggable="false">
+                    <div class="input-wrapper">
+                        <label for="craftingAmount">Crafting Amount</label>
+                        <input type="number" id="craftingAmount" placeholder="0" min="0">
+                    </div>
+                </div>
+                
+                <div class="input-group sub-group">
+                    <img src="https://lostarkcodex.com/icons/money_4.webp" alt="Gold" class="input-icon" draggable="false">
+                    <div class="input-wrapper">
+                        <label for="currentAbidosPrice">Current Price</label>
+                        <input type="number" id="currentAbidosPrice" placeholder="0" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <img src="https://lostarkcodex.com/icons/money_4.webp" alt="Gold" class="input-icon" draggable="false">
+                <div class="input-wrapper">
+                    <label for="craftingCost">Crafting Cost per x10 Abidos</label>
+                    <input type="number" id="craftingCost" placeholder="0" min="0" step="0.01">
+                </div>
+            </div>
+        </div>
+
+        <div class="results-container">
+            <p class="result-sentence">
+                You are going to spend <span id="resBcCost" class="highlight-val">0</span> gold for <img src="https://lostarkcodex.com/icons/shop_icon_44.webp" alt="Blue Crystals" class="inline-icon" draggable="false">
+            </p>
+            <p class="result-sentence">
+                You are going to spend <span id="resYourCraftingCost" class="highlight-val">0</span> <img src="https://lostarkcodex.com/icons/money_4.webp" alt="Gold" class="inline-icon" draggable="false"> to craft <span id="resCraftingAmount" class="highlight-val">0</span> <img src="https://lostarkcodex.com/icons/use_13_252.webp" alt="Abidos" class="inline-icon" draggable="false">
+            </p>
+            <p class="result-sentence">
+                You are going to spend <span id="resTotalAbidosCost" class="highlight-val">0</span> in total for buying <img src="https://lostarkcodex.com/icons/shop_icon_2843.webp" alt="Life Energy" class="inline-icon" draggable="false"> and crafting <img src="https://lostarkcodex.com/icons/use_13_252.webp" alt="Abidos" class="inline-icon" draggable="false">
+            </p>
+            <p class="result-sentence">
+                Your potential profit without any auction tax applied is <span id="resPotentialProfit" class="highlight-val">0</span> <img src="https://lostarkcodex.com/icons/money_4.webp" alt="Gold" class="inline-icon" draggable="false">
+            </p>
+            <p class="result-sentence">
+                Your potential profit with auction tax applied is <span id="resProfitAfterTax" class="highlight-val">0</span> <img src="https://lostarkcodex.com/icons/money_4.webp" alt="Gold" class="inline-icon" draggable="false">
+            </p>
+            <div class="actual-profit-sentence">
+                <span>Your actual profit after calculating all costs and auction tax is</span> 
+                <span id="resActualProfit" class="actual-profit-val">0</span> 
+                <img src="https://lostarkcodex.com/icons/money_4.webp" alt="Gold Icon" class="inline-icon" draggable="false">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputIds = ['bcPrice', 'craftingAmount', 'currentAbidosPrice', 'craftingCost'];
+
+        function loadSavedValues() {
+            inputIds.forEach(id => {
+                const savedValue = localStorage.getItem('abidos_' + id);
+                if (savedValue !== null) {
+                    document.getElementById(id).value = savedValue;
+                }
+            });
+            calculateProfit();
+        }
+
+        function handleInput(event) {
+            const id = event.target.id;
+            const value = event.target.value;
+            localStorage.setItem('abidos_' + id, value);
+            calculateProfit();
+        }
+
+        inputIds.forEach(id => {
+            document.getElementById(id).addEventListener('input', handleInput);
+        });
+
+        window.onload = loadSavedValues;
+
+        function formatNumber(num) {
+            return Math.round(num).toLocaleString('tr-TR'); 
+        }
+
+        function calculateProfit() {
+            const bcPrice = parseFloat(document.getElementById('bcPrice').value) || 0;
+            const craftingAmount = parseFloat(document.getElementById('craftingAmount').value) || 0;
+            const currentAbidosPrice = parseFloat(document.getElementById('currentAbidosPrice').value) || 0;
+            const craftingCost = parseFloat(document.getElementById('craftingCost').value) || 0; 
+
+            const blueCrystalCost = bcPrice;
+            const yourCraftingCost = (craftingAmount / 10) * craftingCost;
+            const totalAbidosCost = yourCraftingCost + blueCrystalCost;
+            const potentialProfit = craftingAmount * currentAbidosPrice;
+            const profitAfterTax = potentialProfit * 0.95;
+            const actualProfit = profitAfterTax - yourCraftingCost - blueCrystalCost;
+
+            document.getElementById('resCraftingAmount').textContent = formatNumber(craftingAmount);
+            document.getElementById('resBcCost').textContent = formatNumber(blueCrystalCost);
+            document.getElementById('resYourCraftingCost').textContent = formatNumber(yourCraftingCost);
+            document.getElementById('resTotalAbidosCost').textContent = formatNumber(totalAbidosCost);
+            document.getElementById('resPotentialProfit').textContent = formatNumber(potentialProfit);
+            document.getElementById('resProfitAfterTax').textContent = formatNumber(profitAfterTax);
+            document.getElementById('resActualProfit').textContent = formatNumber(actualProfit);
+        }
+    </script>
+
+</body>
+</html>
